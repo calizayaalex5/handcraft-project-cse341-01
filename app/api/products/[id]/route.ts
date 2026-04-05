@@ -6,7 +6,8 @@ export async function GET(
     { params }: { params: { id: string } } 
 ) {
     try {
-        const product = await getProductById(params.id)
+        const { id } = await params
+        const product = await getProductById(id)
 
         if (!product) {
             return NextResponse.json(
