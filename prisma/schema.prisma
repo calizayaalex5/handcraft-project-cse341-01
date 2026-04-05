@@ -1,0 +1,111 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+model User {
+    id        String   @id @default(cuid())
+    name      String
+    email     String   @unique
+    password  String
+    role      Role     @default(BUYER)
+    createdAt DateTime @default(now())
+
+    orders    Order[]
+    reviews   Review[]
+    wishlist  Wishlist[]
+    cart      Cart[]
+}
+
+enum Role {
+    BUYER
+    SELLER
+    ADMIN
+}
+
+model Product {
+    id          String   @id @default(cuid())
+    name        String
+    description String
+    price       Float
+    stock       Int
+    image       String?
+    categoryId  String
+    createdAt   DateTime @default(now())
+
+    category    Category   @relation(fields: [categoryId], references: [id])
+    reviews     Review[]
+    wishlist    Wishlist[]
+    orderItems  OrderItem[]
+    cartItems   Cart[]
+}
+
+model Category {
+    id       String    @id @default(cuid())
+    name     String
+    slug     String    @unique
+    products Product[]
+}
+
+model Order {
+    id        String      @id @default(cuid())
+    userId    String
+    total     Float
+    status    OrderStatus @default(PENDING)
+    createdAt DateTime    @default(now())
+
+    user      User        @relation(fields: [userId], references: [id])
+    items     OrderItem[]
+}
+
+enum OrderStatus {
+    PENDING
+    SHIPPED
+    DELIVERED
+    CANCELLED
+}
+
+model OrderItem {
+    id        String  @id @default(cuid())
+    orderId   String
+    productId String
+    quantity  Int
+    price     Float
+
+    order     Order   @relation(fields: [orderId], references: [id])
+    product   Product @relation(fields: [productId], references: [id])
+}
+
+model Review {
+    id        String   @id @default(cuid())
+    userId    String
+    productId String
+    rating    Int
+    comment   String
+    createdAt DateTime @default(now())
+
+    user      User    @relation(fields: [userId], references: [id])
+    product   Product @relation(fields: [productId], references: [id])
+}
+
+model Wishlist {
+    id        String  @id @default(cuid())
+    userId    String
+    productId String
+
+    user      User    @relation(fields: [userId], references: [id])
+    product   Product @relation(fields: [productId], references: [id])
+}
+
+model Cart {
+    id        String  @id @default(cuid())
+    userId    String
+    productId String
+    quantity  Int
+
+    user      User    @relation(fields: [userId], references: [id])
+    product   Product @relation(fields: [productId], references: [id])
+}

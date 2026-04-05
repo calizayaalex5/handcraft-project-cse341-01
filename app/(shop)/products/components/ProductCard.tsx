@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Heart } from "lucide-react"
 
 type Product = {
-    id: number
+    id: string
     name: string
     price: string
     category: string
