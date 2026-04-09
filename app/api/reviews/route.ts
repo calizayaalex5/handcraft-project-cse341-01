@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { getReviewsByProduct, createReview } from "@/lib/controllers/review.controller"
-
+import { authMiddleware } from "@/lib/middleware/auth.middleware"
+    
 // GET /api/reviews?productId=xxx
 export async function GET(request: Request) {
     try {
@@ -26,6 +27,9 @@ export async function GET(request: Request) {
 
 // POST /api/reviews
 export async function POST(request: Request) {
+    const auth = authMiddleware(request)
+    if (auth instanceof NextResponse) return auth
+
     try {
         const body = await request.json()
         const { userId, productId, rating, comment } = body

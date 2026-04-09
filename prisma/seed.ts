@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { readFileSync } from "fs"
+import bcrypt from "bcryptjs"
 
 const envContent = readFileSync(".env.local", "utf-8")
 const match = envContent.match(/DATABASE_URL="([^"]+)"/)
@@ -45,14 +46,16 @@ async function main() {
   })
 
   console.log("✅ Productos creados")
+  
+   const hashedPassword = await bcrypt.hash("admin123", 10)
 
   await prisma.user.upsert({
     where: { email: "admin@handcraft.com" },
-    update: {},
+    update: { password: hashedPassword },
     create: {
       name: "Admin",
       email: "admin@handcraft.com",
-      password: "admin123",
+      password: hashedPassword,
       role: "ADMIN",
     },
   })

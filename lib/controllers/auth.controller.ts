@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db"
 import bcrypt from "bcryptjs"
+import { generateToken } from "@/lib/middleware/jwt"
 
 export async function registerUser(
   name: string,
@@ -28,9 +29,12 @@ export async function registerUser(
         },
     })
 
+    //generar token JWT
+    const token = generateToken({ id: user.id, email: user.email, role: user.role })
+
     //no retornamos la contraseña
     const { password: _, ...userWithoutPassword } = user
-    return userWithoutPassword
+    return { ...userWithoutPassword, token }
 
 }
 
@@ -51,6 +55,8 @@ export async function loginUser(email: string, password: string) {
         throw new Error("Credenciales incorrectas")
     }
 
+    const token = generateToken({ id: user.id, email: user.email, role: user.role })
+
     const { password: _, ...userWithoutPassword } = user
-    return userWithoutPassword
+    return { ...userWithoutPassword, token }
 }

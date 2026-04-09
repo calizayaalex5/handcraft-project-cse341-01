@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { getOrders, createOrder } from "@/lib/controllers/order.controller";
 import { error } from "console";
+import { authMiddleware } from "@/lib/middlewares/auth.middleware"
 
 // GET /api/orders?userID=xxx
 export async function GET(request: Request) {
+    const auth = authMiddleware(request)
+    if (auth instanceof NextResponse) return auth
+
     try {
         const { searchParams } = new URL(request.url);
         const userId = searchParams.get("userId");
@@ -27,6 +31,9 @@ export async function GET(request: Request) {
 
 // POST /api/orders
 export async function POST(request: Request) {
+    const auth = authMiddleware(request)
+    if (auth instanceof NextResponse) return auth
+
     try {
         const body = await request.json();
         const { userId, items } = body

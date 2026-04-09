@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server"
 import { getCart, addToCart } from "@/lib/controllers/cart.controller"
+import { authMiddleware } from "@/lib/middleware/auth.middleware"
 
 export async function GET(request: Request) {
+    const auth = authMiddleware(request)
+    if (auth instanceof NextResponse) return auth
+
     try {
         const { searchParams } = new URL(request.url)
         const userId = searchParams.get("userId")
@@ -24,6 +28,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+    const auth = authMiddleware(request)
+    if (auth instanceof NextResponse) return auth
+
     try {
         const body = await request.json()
         const { userId, productId, quantity = 1 } = body
