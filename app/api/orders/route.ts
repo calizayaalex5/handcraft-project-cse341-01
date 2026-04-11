@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getOrders, createOrder } from "@/lib/controllers/order.controller";
 import { error } from "console";
-import { authMiddleware } from "@/lib/middlewares/auth.middleware"
+import { authMiddleware } from "@/lib/middleware/auth.middleware"
 
 // GET /api/orders?userID=xxx
 export async function GET(request: Request) {

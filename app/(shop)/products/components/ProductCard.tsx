@@ -1,5 +1,7 @@
+"use client"
 import Link from "next/link"
 import { Heart } from "lucide-react"
+import { useCart } from "@/app/hooks/useCart"
 
 type Product = {
     id: string
@@ -9,13 +11,15 @@ type Product = {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
+    const { addToCart, loading } = useCart()
+
     return (
         <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
 
             <div className="relative w-full h-56 bg-stone-100">
                 <div className="w-full h-full bg-stone-200 group-hover:bg-stone-300 transition" />
                 <button className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-sm hover:text-red-400 transition">
-                <Heart size={16} className="text-stone-400" />
+                    <Heart size={16} className="text-stone-400" />
                 </button>
             </div>
 
@@ -26,12 +30,16 @@ export default function ProductCard({ product }: { product: Product }) {
                 </Link>
                 <div className="flex items-center justify-between mt-2">
                     <p className="text-sm font-bold text-stone-800">{product.price}</p>
-                    <button className="text-xs bg-stone-800 text-white px-3 py-1 rounded-full hover:bg-stone-700 transition">
-                        + Carrito
+                    <button 
+                        onClick={() => addToCart(product.id)}
+                        disabled={loading}
+                        className="text-xs bg-stone-800 text-white px-3 py-1 rounded-full hover:bg-stone-700 transition disabled:opacity-50"
+                    >
+                        {loading ? "..." : "+ Carrito"}
                     </button>
                 </div>
             </div>
-
+ 
         </div>
     )
 }

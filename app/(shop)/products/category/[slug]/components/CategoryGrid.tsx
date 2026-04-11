@@ -1,31 +1,26 @@
 import Link from "next/link"
 import { Heart } from "lucide-react"
 
-const productsByCategory: Record<string, {id: number; name: string; price: string}[]> = {
-    joyeria: [
-        { id: 1, name: "Collar Artesanal",  price: "$24.99" },
-        { id: 4, name: "Aretes de Plata",   price: "$18.99" },
-        { id: 6, name: "Pulsera de Cuero",  price: "$15.99" },
-    ],
-    decoracion: [
-        { id: 2, name: "Jarrón de Barro",       price: "$39.99" },
-        { id: 5, name: "Cojín Bordado",          price: "$29.99" },
-        { id: 8, name: "Macetero de Cerámica",   price: "$44.99" },
-    ],
-    ropa: [
-        { id: 3, name: "Bolso Tejido",       price: "$54.99" },
-        { id: 7, name: "Vestido Artesanal",  price: "$74.99" },
-    ],
-    nuevos: [
-        { id: 1, name: "Collar Artesanal",  price: "$24.99" },
-        { id: 2, name: "Jarrón de Barro",   price: "$39.99" },
-        { id: 3, name: "Bolso Tejido",      price: "$54.99" },
-        { id: 4, name: "Aretes de Plata",   price: "$18.99" },
-    ],
+type Product = {
+    id: string
+    name: string
+    price: number
+    category: { name: string; slug: string }
 }
 
-export default function categoryGrid({ slug }: {slug: string}) {
-    const products = productsByCategory[slug] ?? []
+async function getProductsByCategory(slug: string): Promise<Product[]> {
+    const res = await fetch(`${process.env.API_URL}/api/products`, {
+        cache: "no-store",
+    })
+    const products: Product[] = await res.json()
+
+    if (slug === "nuevos") return products.slice(0, 4)
+
+    return products.filter((p) => p.category.slug === slug)
+}
+
+export default async function categoryGrid({ slug }: {slug: string}) {
+    const products = await getProductsByCategory(slug)
 
     if (products.length === 0) {
         return (
@@ -42,28 +37,28 @@ export default function categoryGrid({ slug }: {slug: string}) {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map((product) => (
                 <div key={product.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-                    
+
                     <div className="relative w-full h-48 bg-stone-100">
                         <div className="w-full h-full bg-stone-200 group-hover:bg-stone-300 transition" />
                         <button className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-sm hover:text-red-400 transition">
-                            <Heart size={16} className="text-stone-400" />
+                        <Heart size={16} className="text-stone-400" />
                         </button>
                     </div>
 
                     <div className="p-4">
+                        <p className="text-xs text-stone-400 mb-1">{product.category.name}</p>
                         <Link href={`/products/${product.id}`}>
-                            <p className="text-sm font-semibold text-stone-800 hover:underline">{product.name}</p>
+                        <p className="text-sm font-semibold text-stone-800 hover:underline">{product.name}</p>
                         </Link>
                         <div className="flex items-center justify-between mt-2">
-                            <p className="text-sm font-bold text-stone-800">{product.price}</p>
-                            <button className="text-xs bg-stone-800 text-white px-3 py-1 rounded-full hover:bg-stone-700 transition">
-                                + Carrito
-                            </button>
+                        <p className="text-sm font-bold text-stone-800">${product.price.toFixed(2)}</p>
+                        <button className="text-xs bg-stone-800 text-white px-3 py-1 rounded-full hover:bg-stone-700 transition">
+                            + Carrito
+                        </button>
                         </div>
                     </div>
-                    
-                </div>
 
+                </div>
             ))}
         </div>
     )
