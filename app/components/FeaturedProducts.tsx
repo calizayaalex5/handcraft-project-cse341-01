@@ -1,19 +1,5 @@
 import Link from "next/link"
-
-type Product = {
-    id: string
-    name: string
-    price: number
-    category: { name: string }
-}
-
-
-async function getProducts(): Promise<Product[]> {
-    const res = await fetch(`${process.env.API_URL}/api/products`, {
-        cache: "no-store",
-    })
-    return res.json()
-}
+import { getProducts } from "@/lib/controllers/product.controller"
 
 export default async function FeaturedProducts() {
     const products = await getProducts()
@@ -22,11 +8,9 @@ export default async function FeaturedProducts() {
     return (
         <section className="py-16 px-6 bg-white">
             <div className="max-w-7xl mx-auto">
-
                 <h2 className="text-center text-2xl font-bold text-stone-800 tracking-wider uppercase mb-10">
                     Nuevos Productos
                 </h2>
-
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     {featured.map((product) => (
                         <Link
@@ -41,7 +25,6 @@ export default async function FeaturedProducts() {
                         </Link>
                     ))}
                 </div>
-
                 <div className="text-center mt-10">
                     <Link
                         href="/products"
@@ -50,7 +33,6 @@ export default async function FeaturedProducts() {
                         Ver más productos
                     </Link>
                 </div>
-
             </div>
         </section>
     )
