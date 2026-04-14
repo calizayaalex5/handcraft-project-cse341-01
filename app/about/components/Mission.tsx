@@ -1,9 +1,16 @@
+import Image from "next/image"
+
 export default function Mission() {
     return (
         <section className="py-20 px-6">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="w-full h-72 bg-stone-200 rounded-2xl flex items-center justify-center text-stone-400 text-sm">
-                Imagen misión
+            <div className="relative w-full h-72 rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                    src="/images/banners/mission.webp"
+                    alt="Nuestra misión - Artesanos trabajando"
+                    fill
+                    className="object-cover"
+                />
             </div>
             
             <div>

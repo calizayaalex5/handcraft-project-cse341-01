@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Search } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 export default function Hero() {
     const [query, setQuery] = useState("")
@@ -48,8 +49,14 @@ export default function Hero() {
                 </Link>
                 </div>
 
-                <div className="flex-1 w-full h-80 bg-stone-200 rounded-2xl flex items-center justify-center text-stone-400 text-sm">
-                Banner Image
+                <div className="flex-1 w-full h-80 relative rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                    src="/images/banners/hero.webp"
+                    alt="Handcraft Haven - Productos artesanales únicos"
+                    fill
+                    className="object-cover"
+                    priority
+                />
                 </div>
 
             </div>
