@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
-import { getUserById, updateUserRole, deleteUser } from "@/lib/controllers/user.controller"
+import { getUserById, updateUserRole, updateUser, deleteUser } from "@/lib/controllers/user.controller"
+import { authMiddleware } from "@/lib/middleware/auth.middleware"
 
 // GET /api/users/[id]
 export async function GET(
@@ -31,19 +32,20 @@ export async function PUT(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const auth = authMiddleware(request)
+    if (auth instanceof NextResponse) return auth
+
     try {
         const { id } = await params
         const body = await request.json()
-        const { role } = body
+        const { role, name, email } = body
 
-        if (!role) {
-            return NextResponse.json(
-                { error: "role es requerido" },
-                { status: 400 }
-            )
+        if (role) {
+            const user = await updateUserRole(id, role)
+            return NextResponse.json(user)
         }
 
-        const user = await updateUserRole(id, role)
+        const user = await updateUser(id, { name, email })
         return NextResponse.json(user)
     } catch (error) {
         return NextResponse.json(

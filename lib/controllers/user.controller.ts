@@ -43,6 +43,20 @@ export async function updateUserRole(id: string, role: "BUYER" | "SELLER" | "ADM
     })
 }
 
+export async function updateUser(id: string, data: { name?: string; email?: string }) {
+    return await prisma.user.update({
+        where: { id },
+        data,
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            createdAt: true,
+        },
+    })
+}
+
 export async function deleteUser(id: string) {
     return await prisma.user.delete({
         where: { id },
