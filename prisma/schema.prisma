@@ -23,6 +23,7 @@ model User {
     reviews   Review[]
     wishlist  Wishlist[]
     cart      Cart[]
+    products  Product[]  @relation("SellerProducts")
 }
 
 enum Role {
@@ -39,9 +40,11 @@ model Product {
     stock       Int
     image       String?
     categoryId  String
+    sellerId    String?
     createdAt   DateTime @default(now())
 
     category    Category   @relation(fields: [categoryId], references: [id])
+    seller      User?      @relation("SellerProducts", fields: [sellerId], references: [id])
     reviews     Review[]
     wishlist    Wishlist[]
     orderItems  OrderItem[]

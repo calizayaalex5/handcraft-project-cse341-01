@@ -42,6 +42,7 @@ export async function createProduct(data: {
     stock: number
     categoryId: string
     image?: string
+    sellerId?: string
 }) {
     return await prisma.product.create({
         data,
@@ -68,4 +69,12 @@ export async function deleteProduct(id: string) {
     return await prisma.product.delete({
         where: { id },
     })
-    }
+}
+
+export async function getProductsBySeller(sellerId: string) {
+    return await prisma.product.findMany({
+        where: { sellerId },
+        include: { category: true },
+        orderBy: { createdAt: "desc" },
+    })
+}

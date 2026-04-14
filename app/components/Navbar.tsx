@@ -62,6 +62,11 @@ export default function Navbar() {
                         Admin
                         </Link>
                     )}
+                    {user.role === "SELLER" && (
+                        <Link href="/seller" className="text-sm text-blue-600 hover:text-blue-800 transition font-medium">
+                            Mi Tienda
+                        </Link>
+                    )}
                     <button
                         onClick={logout}
                         className="flex items-center gap-1 text-sm text-red-400 hover:text-red-600 transition"
