@@ -1,7 +1,8 @@
-import Navbar from "@/app/components/Navbar";
+import Navbar from "@/app/components/Navbar"
 import Footer from "@/app/components/Footer"
-import CategoryGrid from "./components/CategoryGrid";
-import Link from "next/link";
+import CategoryGrid from "./components/CategoryGrid"
+import Link from "next/link"
+import { getProducts } from "@/lib/controllers/product.controller"
 
 const categoryNames: Record<string, string> = {
     joyeria:    "Joyería",
@@ -10,25 +11,25 @@ const categoryNames: Record<string, string> = {
     nuevos:     "Nuevos Productos",
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const { slug } = await params
-  const categoryName = categoryNames[slug] ?? slug
+export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
+    const categoryName = categoryNames[slug] ?? slug
 
-  return (
+    const allProducts = await getProducts()
+    const products = slug === "nuevos"
+        ? allProducts.slice(0, 4)
+        : allProducts.filter((p) => p.category.slug === slug)
+
+    return (
         <main className="min-h-screen bg-[#fdf8f3]">
             <Navbar />
-
             <section className="max-w-7xl mx-auto px-6 py-16">
-
                 <div className="flex items-center justify-between mb-10">
                     <div>
                         <p className="text-xs text-stone-400 uppercase tracking-widest mb-1">Categoría</p>
                         <h1 className="text-3xl font-bold text-stone-800">{categoryName}</h1>
                     </div>
-                    <Link
-                        href="/products"
-                        className="text-sm text-stone-500 hover:text-stone-800 transition"
-                    >
+                    <Link href="/products" className="text-sm text-stone-500 hover:text-stone-800 transition">
                         ← Ver todos
                     </Link>
                 </div>
@@ -44,17 +45,14 @@ export default async function CategoryPage({ params }: { params: { slug: string 
                                 : "border-stone-200 text-stone-500 hover:bg-stone-800 hover:text-white hover:border-stone-800"
                             }`}
                         >
-                        {label}
+                            {label}
                         </Link>
                     ))}
                 </div>
 
-                <CategoryGrid slug={slug} />
-
+                <CategoryGrid products={products} />
             </section>
-
             <Footer />
         </main>
     )
-
 }

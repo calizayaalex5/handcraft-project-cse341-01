@@ -1,6 +1,7 @@
 "use client"
 import { ShoppingCart, Heart } from "lucide-react"
 import { useCart } from "@/app/hooks/useCart"
+import { useWishlist } from "@/app/hooks/useWishlist"
 
 type Product = {
     id: string
@@ -12,7 +13,8 @@ type Product = {
 }
 
 export default function ProductInfoComponent({ product }: { product: Product }) {
-    const { addToCart, loading } = useCart()
+    const { addToCart, loading: cartLoading } = useCart()
+    const { addToWishlist, loading: wishlistLoading } = useWishlist()
     
     if (!product || !product.category) {
         return <div className="text-stone-400">Cargando producto...</div>
@@ -43,14 +45,18 @@ export default function ProductInfoComponent({ product }: { product: Product }) 
             <div className="flex gap-3">
                 <button
                     onClick={() => addToCart(product.id)}
-                    disabled={loading || product.stock === 0}
+                    disabled={cartLoading || product.stock === 0}
                     className="flex-1 flex items-center justify-center gap-2 bg-stone-800 text-white py-3 rounded-full hover:bg-stone-700 transition text-sm disabled:opacity-50"
                 >
                     <ShoppingCart size={16} />
-                    {product.stock === 0 ? "Agotado" : loading ? "Agregando..." : "Agregar al carrito"}
+                    {product.stock === 0 ? "Agotado" : cartLoading ? "Agregando..." : "Agregar al carrito"}
                 </button>
-                    <button className="p-3 border border-stone-200 rounded-full hover:bg-stone-50 transition">
-                    <Heart size={18} className="text-stone-500" />
+                <button
+                    onClick={() => addToWishlist(product.id)}
+                    disabled={wishlistLoading}
+                    className="p-3 border border-stone-200 rounded-full hover:bg-stone-50 transition"
+                >
+                    <Heart size={18} className={wishlistLoading ? "text-stone-300" : "text-stone-500"} />
                 </button>
             </div>
         </div>
