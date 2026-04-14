@@ -9,6 +9,7 @@ type Product = {
     name: string
     price: string
     category: string
+    image?: string
 }
 
 export default function ProductCard({ product }: { product: Product }) {
