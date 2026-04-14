@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server"
 import { getWishlist, addToWishlist } from "@/lib/controllers/wishlist.controller"
+import { authMiddleware } from "@/lib/middleware/auth.middleware"
 
 // GET /api/wishlist?userId=xxx
 export async function GET(request: Request) {
+    const auth = authMiddleware(request)
+    if (auth instanceof NextResponse) return auth
+
     try {
         const { searchParams } = new URL(request.url)
         const userId = searchParams.get("userId")
@@ -26,6 +30,9 @@ export async function GET(request: Request) {
 
 // POST /api/wishlist
 export async function POST(request: Request) {
+    const auth = authMiddleware(request)
+    if (auth instanceof NextResponse) return auth
+
     try {
         const body = await request.json()
         const { userId, productId } = body
