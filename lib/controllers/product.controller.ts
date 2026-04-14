@@ -20,3 +20,17 @@ export async function getProductById(id: string) {
         },
     })
 }
+
+export async function searchProducts(query: string) {
+    return await prisma.product.findMany({
+        where: {
+            OR: [
+                { name: { contains: query, mode: "insensitive" } },
+                { description: { contains: query, mode: "insensitive" } },
+                { category: { name: { contains: query, mode: "insensitive" } } },
+            ],
+        },
+        include: { category: true },
+        orderBy: { createdAt: "desc" },
+    })
+}

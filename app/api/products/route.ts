@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
-import { getProducts  } from "@/lib/controllers/product.controller";
+import { getProducts, searchProducts } from "@/lib/controllers/product.controller";
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        const products = await getProducts()
-        return NextResponse.json(products)
+        const { searchParams } = new URL(request.url)
+        const query = searchParams.get("search")
+
+    const products = query
+        ? await searchProducts(query)
+        : await getProducts()
+
+    return NextResponse.json(products)
     } catch (error) {
         return NextResponse.json(
             { error: "Error al obtener productos" },

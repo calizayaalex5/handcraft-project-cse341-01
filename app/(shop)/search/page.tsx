@@ -3,23 +3,24 @@ import Footer from "@/app/components/Footer"
 import SearchBar from "./components/SearchBar"
 import SearchResults from "./components/SearchResults"
 
-export default function SearchPage() {
+export default async function SearchPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ q?: string }>
+}) {
+    const { q } = await searchParams
+    const query = q ?? ""
+
     return (
         <main className="min-h-screen bg-[#fdf8f3]">
             <Navbar />
-
             <section className="max-w-7xl mx-auto px-6 py-16">
-
                 <h1 className="text-3xl font-bold text-stone-800 text-center mb-8">
                     Buscar productos
                 </h1>
-
-                <SearchBar />
-
-                <SearchResults />
-
+                <SearchBar initialQuery={query} />
+                <SearchResults query={query} />
             </section>
-
             <Footer />
         </main>
     )
