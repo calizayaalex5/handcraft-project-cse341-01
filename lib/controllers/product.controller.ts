@@ -34,3 +34,38 @@ export async function searchProducts(query: string) {
         orderBy: { createdAt: "desc" },
     })
 }
+
+export async function createProduct(data: {
+    name: string
+    description: string
+    price: number
+    stock: number
+    categoryId: string
+    image?: string
+}) {
+    return await prisma.product.create({
+        data,
+        include: { category: true },
+    })
+}
+
+export async function updateProduct(id: string, data: {
+    name?: string
+    description?: string
+    price?: number
+    stock?: number
+    categoryId?: string
+    image?: string
+}) {
+    return await prisma.product.update({
+        where: { id },
+        data,
+        include: { category: true },
+    })
+}
+
+export async function deleteProduct(id: string) {
+    return await prisma.product.delete({
+        where: { id },
+    })
+    }
