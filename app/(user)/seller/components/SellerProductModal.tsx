@@ -2,6 +2,7 @@
 import { X } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useAuth } from "@/app/context/AuthContext"
+import ImageUpload from "@/app/components/ImageUpload"
 
 type Product = {
     id: string
@@ -51,17 +52,17 @@ export default function SellerProductModal({
         const res = await fetch(url, {
             method,
             headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user!.token}`,
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user!.token}`,
             },
             body: JSON.stringify({
-            name,
-            description,
-            price: parseFloat(price),
-            stock: parseInt(stock),
-            categoryId,
-            image,
-            sellerId: user!.id,
+                name,
+                description,
+                price: parseFloat(price),
+                stock: parseInt(stock),
+                categoryId,
+                image,
+                sellerId: user!.id,
             }),
         })
 
@@ -121,10 +122,12 @@ export default function SellerProductModal({
                         </select>
                     </div>
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs text-stone-500 uppercase tracking-widest">Imagen URL</label>
-                        <input type="text" value={image} onChange={(e) => setImage(e.target.value)}
-                        placeholder="https://..."
-                        className="border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-stone-300" />
+                        <label className="text-xs text-stone-500 uppercase tracking-widest">Imagen</label>
+                        <ImageUpload
+                            onUpload={(url) => setImage(url)}
+                            currentImage={image}
+                            label="Subir imagen del producto"
+                        />
                     </div>
                     <div className="flex gap-3 mt-2">
                         <button onClick={onClose}

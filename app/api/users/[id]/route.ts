@@ -38,16 +38,16 @@ export async function PUT(
     try {
         const { id } = await params
         const body = await request.json()
-        const { role, name, email } = body
 
-        if (role) {
-            const user = await updateUserRole(id, role)
+        if (body.role && Object.keys(body).length === 1) {
+            const user = await updateUserRole(id, body.role)
             return NextResponse.json(user)
         }
 
-        const user = await updateUser(id, { name, email })
+        const user = await updateUser(id, body)
         return NextResponse.json(user)
     } catch (error) {
+        console.error("Error PUT /api/users/[id]:", error)
         return NextResponse.json(
             { error: "Error al actualizar usuario" },
             { status: 500 }

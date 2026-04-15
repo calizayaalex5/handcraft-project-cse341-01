@@ -7,6 +7,7 @@ export async function getUsers() {
             name: true,
             email: true,
             role: true,
+            image: true,
             createdAt: true,
             _count: {
                 select: { orders: true },
@@ -24,6 +25,7 @@ export async function getUserById(id: string) {
             name: true,
             email: true,
             role: true,
+            image: true,
             createdAt: true,
             orders: true,
         },
@@ -43,7 +45,20 @@ export async function updateUserRole(id: string, role: "BUYER" | "SELLER" | "ADM
     })
 }
 
-export async function updateUser(id: string, data: { name?: string; email?: string }) {
+export async function updateUser(
+    id: string,
+    data: {
+        name?: string
+        email?: string
+        image?: string 
+        phone?: string
+        address?: string
+        city?: string
+        country?: string
+        role?: "BUYER" | "SELLER" | "ADMIN"
+        password?: string
+    }
+) {    
     return await prisma.user.update({
         where: { id },
         data,
@@ -52,12 +67,21 @@ export async function updateUser(id: string, data: { name?: string; email?: stri
             name: true,
             email: true,
             role: true,
+            image: true,
             createdAt: true,
         },
     })
 }
 
 export async function deleteUser(id: string) {
+    await prisma.cart.deleteMany({ where: { userId: id } })
+    await prisma.wishlist.deleteMany({ where: { userId: id } })
+    await prisma.review.deleteMany({ where: { userId: id } })
+    await prisma.orderItem.deleteMany({
+        where: { order: { userId: id } }
+    })
+    await prisma.order.deleteMany({ where: { userId: id } })
+
     return await prisma.user.delete({
         where: { id },
     })

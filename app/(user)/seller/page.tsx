@@ -8,6 +8,7 @@ import SellerProductModal from "./components/SellerProductModal"
 import Link from "next/link"
 import { useAuth } from "@/app/context/AuthContext"
 import { User, Mail } from "lucide-react"
+import Image from "next/image"
 
 type Product = {
   id: string
@@ -93,10 +94,18 @@ export default function SellerPage() {
                 </Link>
                 </div>
 
-                {/* Perfil del vendedor */}
                 <div className="bg-white rounded-2xl p-6 shadow-sm mb-8 flex items-center gap-5">
-                <div className="w-16 h-16 bg-stone-200 rounded-full flex items-center justify-center">
-                    <User size={28} className="text-stone-400" />
+                <div className="relative w-16 h-16 bg-stone-200 rounded-full overflow-hidden flex-shrink-0">
+                    {user.image ? (
+                        <Image
+                        src={user.image}
+                        alt={user.name}
+                        fill
+                        className="object-cover"
+                        />
+                    ) : (
+                        <User size={28} className="text-stone-400" />
+                    )}
                 </div>
                 <div>
                     <h2 className="text-xl font-bold text-stone-800">{user.name}</h2>
