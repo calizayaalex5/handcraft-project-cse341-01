@@ -11,10 +11,17 @@ export async function getProductById(id: string) {
     return await prisma.product.findUnique({
         where: { id },
         include: {
-        category: true,
+            category: true,
+            seller: {
+                select: {
+                id: true,
+                name: true,
+                image: true,
+                },
+            },
             reviews: {
                 include: {
-                user: { select: { name: true } },
+                    user: { select: { name: true } },
                 },
             },
         },

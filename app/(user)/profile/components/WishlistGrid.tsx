@@ -1,7 +1,8 @@
 "use client"
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Heart, ShoppingCart, Trash2 } from "lucide-react"
+import Image from "next/image"
+import { Trash2 } from "lucide-react"
 
 type WishlistItem = {
     id: string
@@ -9,6 +10,7 @@ type WishlistItem = {
         id: string
         name: string
         price: number
+        image?: string | null
         category: { name: string }
     }
 }
@@ -48,11 +50,20 @@ export default function WishlistGrid({ userId, token }: { userId: string, token:
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {wishlist.slice(0, 3).map((item) => (
                     <div key={item.id} className="group border border-stone-100 rounded-xl overflow-hidden hover:shadow-md transition">
-                        <div className="relative w-full h-32 bg-stone-100">
-                            <div className="w-full h-full bg-stone-200 group-hover:bg-stone-300 transition" />
+                        <div className="relative w-full h-32 bg-stone-200">
+                            {item.product.image ? (
+                            <Image
+                                src={item.product.image}
+                                alt={item.product.name}
+                                fill
+                                className="object-cover group-hover:scale-105 transition"
+                            />
+                            ) : (
+                                <div className="w-full h-full bg-stone-200 group-hover:bg-stone-300 transition" />
+                            )}
                             <button
                                 onClick={() => handleRemove(item.id)}
-                                className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-sm hover:bg-red-50 transition"
+                                className="absolute top-2 right-2 z-10 p-1.5 bg-white rounded-full shadow-sm hover:bg-red-50 transition"
                             >
                                 <Trash2 size={14} className="text-stone-400 hover:text-red-400" />
                             </button>

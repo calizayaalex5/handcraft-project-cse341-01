@@ -1,7 +1,8 @@
 "use client"
-import { ShoppingCart, Heart } from "lucide-react"
+import { ShoppingCart, Heart, User } from "lucide-react"
 import { useCart } from "@/app/hooks/useCart"
 import { useWishlist } from "@/app/hooks/useWishlist"
+import Image from "next/image"
 
 type Product = {
     id: string
@@ -10,6 +11,11 @@ type Product = {
     price: number
     stock: number
     category: { name: string }
+    seller?: {
+        id: string
+        name: string
+        image: string | null
+    } | null
 }
 
 export default function ProductInfoComponent({ product }: { product: Product }) {
@@ -31,10 +37,25 @@ export default function ProductInfoComponent({ product }: { product: Product }) 
             <p className="text-stone-500 text-sm leading-relaxed">{product.description}</p>
 
             <div className="flex items-center gap-3 border border-stone-200 rounded-xl p-3">
-                <div className="w-10 h-10 bg-stone-200 rounded-full" />
+                <div className="relative w-10 h-10 bg-stone-200 rounded-full overflow-hidden flex-shrink-0">
+                    {product.seller?.image ? (
+                        <Image
+                            src={product.seller.image}
+                            alt={product.seller.name}
+                            fill
+                            className="object-cover"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                            <User size={20} className="text-stone-400" />
+                        </div>
+                    )}
+                </div>
                 <div>
                     <p className="text-xs text-stone-400">Vendido por</p>
-                    <p className="text-sm font-semibold text-stone-800">Artesano</p>
+                    <p className="text-sm font-semibold text-stone-800">
+                        {product.seller?.name ?? "Vendedor desconocido"}
+                    </p>
                 </div>
             </div>
 
