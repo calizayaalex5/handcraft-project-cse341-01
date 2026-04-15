@@ -50,7 +50,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                     ))}
                 </div>
 
-                <CategoryGrid products={products} />
+                <CategoryGrid products={products.map(p => ({ ...p, image: p.image ?? undefined }))} />
             </section>
             <Footer />
         </main>
