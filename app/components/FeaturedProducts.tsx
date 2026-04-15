@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { getProducts } from "@/lib/controllers/product.controller"
 
 export default async function FeaturedProducts() {
@@ -18,7 +19,18 @@ export default async function FeaturedProducts() {
                             href={`/products/${product.id}`}
                             className="group bg-stone-50 rounded-2xl p-4 hover:shadow-lg transition cursor-pointer"
                         >
-                            <div className="w-full h-48 bg-stone-200 rounded-xl mb-4 group-hover:bg-stone-300 transition" />
+                            <div className="relative w-full h-48 rounded-xl mb-4 overflow-hidden bg-stone-200">
+                                {product.image ? (
+                                <Image
+                                    src={product.image}
+                                    alt={product.name}
+                                    fill
+                                    className="object-cover group-hover:scale-105 transition"
+                                />
+                                ) : (
+                                    <div className="w-full h-full bg-stone-200 group-hover:bg-stone-300 transition" />
+                                )}
+                            </div>
                             <p className="text-xs text-stone-400 mb-1">{product.category.name}</p>
                             <p className="text-sm font-semibold text-stone-800">{product.name}</p>
                             <p className="text-sm text-stone-500 mt-1">${product.price.toFixed(2)}</p>

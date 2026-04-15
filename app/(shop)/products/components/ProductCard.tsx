@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link"
+import Image from "next/image"
 import { Heart } from "lucide-react"
 import { useCart } from "@/app/hooks/useCart"
 import { useWishlist } from "@/app/hooks/useWishlist"
@@ -19,18 +20,22 @@ export default function ProductCard({ product }: { product: Product }) {
     return (
         <div className="group bg-white rounded-2xl shadow-sm hover:shadow-md transition">
 
-            <div className="relative w-full h-56 bg-stone-100">
-                <div className="w-full h-full bg-stone-200 group-hover:bg-stone-300 transition pointer-events-none" />
-            </div>
-
-            <div className="relative">    
+            <div className="relative w-full h-56 bg-stone-200 rounded-t-2xl overflow-hidden">
+                {product.image ? (
+                <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition"
+                />
+                ) : (
+                    <div className="w-full h-full bg-stone-200 group-hover:bg-stone-300 transition" />
+                )}
                 <button
-                    onClick={() => {
-                        addToWishlist(product.id)
-                    }}
+                    onClick={() => addToWishlist(product.id)}
                     disabled={wishlistLoading}
-                    className="absolute -top-12 right-3 p-2 bg-white rounded-full shadow-sm hover:text-red-400 transition z-10"
-                    >
+                    className="absolute top-3 right-3 z-10 p-2 bg-white rounded-full shadow-sm hover:text-red-400 transition"
+                >
                     <Heart size={16} className="text-stone-400" />
                 </button>
             </div>

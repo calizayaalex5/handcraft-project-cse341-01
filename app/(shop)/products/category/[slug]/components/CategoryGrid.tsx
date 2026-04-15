@@ -1,14 +1,16 @@
 "use client"
 import Link from "next/link"
+import Image from "next/image"
 import { Heart } from "lucide-react"
 import { useCart } from "@/app/hooks/useCart"
 import { useWishlist } from "@/app/hooks/useWishlist"
 
 type Product = {
-  id: string
-  name: string
-  price: number
-  category: { name: string; slug: string }
+    id: string
+    name: string
+    price: number
+    image?: string
+    category: { name: string; slug: string }
 }
 
 function ProductItem({ product }: { product: Product }) {
@@ -17,7 +19,17 @@ function ProductItem({ product }: { product: Product }) {
 
     return (
         <div className="group bg-white rounded-2xl shadow-sm hover:shadow-md transition">
-            <div className="relative w-full h-48 bg-stone-200 group-hover:bg-stone-300 transition rounded-t-2xl">
+            <div className="relative w-full h-48 bg-stone-200 rounded-t-2xl overflow-hidden">
+                {product.image ? (
+                <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition"
+                />
+                ) : (
+                    <div className="w-full h-full bg-stone-200 group-hover:bg-stone-300 transition" />
+                )}
                 <button
                     onClick={() => addToWishlist(product.id)}
                     disabled={wishlistLoading}
