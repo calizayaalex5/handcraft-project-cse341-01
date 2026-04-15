@@ -46,7 +46,7 @@ export default function Navbar() {
                         placeholder="Buscar..."
                         className="outline-none text-xs text-stone-700 bg-transparent w-28"
                     />
-                        <button onClick={handleSearch}>
+                    <button onClick={handleSearch} aria-label="Buscar">
                         <Search size={14} className="text-stone-400 hover:text-stone-700 transition" />
                     </button>
                 </div>
@@ -69,6 +69,7 @@ export default function Navbar() {
                     )}
                     <button
                         onClick={logout}
+                        aria-label="Cerrar sesion"
                         className="flex items-center gap-1 text-sm text-red-400 hover:text-red-600 transition"
                     >
                         <LogOut size={16} />
@@ -81,7 +82,7 @@ export default function Navbar() {
                     </>
                 )}
 
-                <Link href="/cart" className="hover:text-stone-900 transition">
+                <Link href="/cart"aria-label="Ver carrito" className="hover:text-stone-900 transition">
                     <ShoppingCart size={20} />
                 </Link>
                 </div>

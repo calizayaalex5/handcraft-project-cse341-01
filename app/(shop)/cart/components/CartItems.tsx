@@ -34,6 +34,7 @@ export default function CartItem({ item, onRemove }: { item: CartItemType, onRem
 
             <button
                 onClick={() => onRemove(item.id)}
+                aria-label={`Eliminar ${item.product.name} del carrito`}
                 className="text-stone-300 hover:text-red-400 transition"
             >
                 <Trash2 size={18} />

@@ -33,6 +33,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 )}
                 <button
                     onClick={() => addToWishlist(product.id)}
+                    aria-label={`Agregar ${product.name} a wishlist`}
                     disabled={wishlistLoading}
                     className="absolute top-3 right-3 z-10 p-2 bg-white rounded-full shadow-sm hover:text-red-400 transition"
                 >
@@ -49,6 +50,7 @@ export default function ProductCard({ product }: { product: Product }) {
                     <p className="text-sm font-bold text-stone-800">{product.price}</p>
                     <button
                         onClick={() => addToCart(product.id)}
+                        aria-label={`Agregar ${product.name} al carrito`}
                         disabled={cartLoading}
                         className="text-xs bg-stone-800 text-white px-3 py-1 rounded-full hover:bg-stone-700 transition disabled:opacity-50"
                     >
