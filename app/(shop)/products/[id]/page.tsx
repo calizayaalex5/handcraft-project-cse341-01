@@ -5,7 +5,17 @@ import ProductInfoComponent from "./components/ProductInfo"
 import Reviews from "./components/Reviews"
 import { getProductById } from "@/lib/controllers/product.controller"
 import Link from "next/link"
+import type { Metadata } from "next"
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params
+    const product = await getProductById(id)
+
+    return {
+        title: product?.name ?? "Producto",
+        description: product?.description ?? "Producto artesanal único.",
+    }
+}
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const product = await getProductById(id)
