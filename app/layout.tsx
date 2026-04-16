@@ -1,5 +1,6 @@
 import "./globals.css"
 import { AuthProvider } from "./context/AuthContext"
+import { Toaster } from "react-hot-toast"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -30,6 +31,30 @@ export default function DashboardLayout({
             <body>
                 <AuthProvider>
                     {children}
+                    <Toaster
+                        position="bottom-right"
+                        toastOptions={{
+                            duration: 3000,
+                            style: {
+                                background: "#292524",
+                                color: "#fff",
+                                borderRadius: "12px",
+                                fontSize: "14px",
+                            },
+                            success: {
+                                iconTheme: {
+                                primary: "#22c55e",
+                                secondary: "#fff",
+                                },
+                            },
+                            error: {
+                                iconTheme: {
+                                primary: "#ef4444",
+                                secondary: "#fff",
+                                },
+                            },
+                        }}
+                    />
                 </AuthProvider>
             </body>
         </html>

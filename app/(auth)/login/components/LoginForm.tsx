@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { useState } from "react"
 import { useAuth } from "@/app/context/AuthContext"
+import toast from "react-hot-toast"
 
 export default function LoginForm() {
     const { login } = useAuth()
@@ -16,7 +17,7 @@ export default function LoginForm() {
     try {
         await login(email, password)
     } catch (err: any) {
-        setError(err.message)
+        toast.error(err.message)
     } finally {
         setLoading(false)
         }
