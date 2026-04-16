@@ -19,6 +19,8 @@ type Category = {
     name: string
 }
 
+let uploadedImageUrl = ""
+
 export default function AddProductModal({
     onClose,
     onSave,
@@ -39,12 +41,17 @@ export default function AddProductModal({
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        uploadedImageUrl = product?.image ?? ""
+
         fetch("/api/categories")
         .then((res) => res.json())
         .then(setCategories)
     }, [])
 
-    const handleSave = async () => {
+    const handleSave = async (imageOverride?: string) => {
+        const finalImage = imageOverride ?? image
+        console.log("finalImage:", finalImage)
+
         if (!name || !description || !price || !stock || !categoryId) return
         setLoading(true)
 
@@ -64,7 +71,7 @@ export default function AddProductModal({
                     price: parseFloat(price),
                     stock: parseInt(stock),
                     categoryId,
-                    image,
+                    image: uploadedImageUrl,
                 }),
             })
 
@@ -130,7 +137,10 @@ export default function AddProductModal({
                     <div className="flex flex-col gap-1">
                         <label className="text-xs text-stone-500 uppercase tracking-widest">Imagen</label>
                         <ImageUpload
-                            onUpload={(url) => setImage(url)}
+                            onUpload={(url) => {
+                                console.log("URL guardada:", url)
+                                uploadedImageUrl = url
+                            }}
                             currentImage={image}
                             label="Subir imagen del producto"
                         />
@@ -141,7 +151,7 @@ export default function AddProductModal({
                             className="flex-1 border border-stone-200 text-stone-700 text-sm py-3 rounded-full hover:bg-stone-50 transition">
                             Cancelar
                         </button>
-                        <button onClick={handleSave} disabled={loading}
+                        <button onClick={() => handleSave()} disabled={loading}
                             className="flex-1 bg-stone-800 text-white text-sm py-3 rounded-full hover:bg-stone-700 transition disabled:opacity-50">
                             {loading ? "Guardando..." : product ? "Actualizar" : "Agregar producto"}
                         </button>
