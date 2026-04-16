@@ -10,6 +10,7 @@ type Product = {
     id: string
     name: string
     price: number
+    stock: number
     image?: string
     category: { name: string; slug: string }
 }
@@ -133,6 +134,7 @@ export default function ProductsPage() {
                                 price: `$${product.price.toFixed(2)}`,
                                 category: product.category.name,
                                 image: product.image ?? undefined,
+                                stock: product.stock,
                                 }}
                             />
                             ))}

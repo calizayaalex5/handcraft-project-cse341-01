@@ -14,6 +14,8 @@ export default async function ProductGrid() {
                         name: product.name,
                         price: `$${product.price.toFixed(2)}`,
                         category: product.category.name,
+                        image: product.image ?? undefined,
+                        stock: product.stock,
                     }}
                 />
             ))}

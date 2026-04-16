@@ -11,6 +11,7 @@ type Product = {
     price: string
     category: string
     image?: string
+    stock?: number
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -31,6 +32,16 @@ export default function ProductCard({ product }: { product: Product }) {
                 ) : (
                     <div className="w-full h-full bg-stone-200 group-hover:bg-stone-300 transition" />
                 )}
+
+                {product.stock !== undefined && product.stock === 0 && (
+                    
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                            Agotado
+                        </span>
+                    </div>
+                )}
+
                 <button
                     onClick={() => addToWishlist(product.id)}
                     aria-label={`Agregar ${product.name} a wishlist`}
@@ -51,10 +62,14 @@ export default function ProductCard({ product }: { product: Product }) {
                     <button
                         onClick={() => addToCart(product.id)}
                         aria-label={`Agregar ${product.name} al carrito`}
-                        disabled={cartLoading}
-                        className="text-xs bg-stone-800 text-white px-3 py-1 rounded-full hover:bg-stone-700 transition disabled:opacity-50"
+                        disabled={cartLoading || product.stock === 0}
+                        className={`text-xs px-3 py-1 rounded-full transition ${
+                            product.stock === 0
+                            ? "bg-stone-300 text-stone-500 cursor-not-allowed"
+                            : "bg-stone-800 text-white hover:bg-stone-700"
+                        }`}
                     >
-                        {cartLoading ? "..." : "+ Carrito"}
+                        {cartLoading ? "..." : product.stock === 0 ? "Agotado" : "+ Carrito"}
                     </button>
                 </div>
             </div>
