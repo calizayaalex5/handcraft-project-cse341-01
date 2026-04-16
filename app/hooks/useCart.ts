@@ -16,6 +16,27 @@ export function useCart() {
 
         setLoading(true)
         try {
+            const productRes = await fetch(`/api/products/${productId}`)
+            const product = await productRes.json()
+            
+            if (product.stock <= 0) {
+                toast.error("Este producto está agotado")
+                setLoading(false)
+                return
+            }
+
+            const cartRes = await fetch(`/api/cart?userId=${user.id}`, {
+                headers: { Authorization: `Bearer ${user.token}` },
+            })
+                const cart = await cartRes.json()
+                const existingItem = cart.find((item: any) => item.productId === productId)
+                const currentQty = existingItem ? existingItem.quantity : 0
+
+                if (currentQty + quantity > product.stock) {
+                    toast.error(`Solo hay ${product.stock} unidades disponibles`)
+                    setLoading(false)
+                return
+            }
             const res = await fetch("/api/cart", {
                 method: "POST",
                 headers: {
@@ -32,7 +53,7 @@ export function useCart() {
             toast.success("¡Producto agregado al carrito! 🛒")
 
         } catch (error: any) {
-            alert(error.message)
+            toast.error(error.message)
         } finally {
             setLoading(false)
         }

@@ -1,6 +1,7 @@
 "use client"
 
 import { Pencil, Trash2 } from "lucide-react"
+import Image from "next/image"
 
 type Product = {
     id: string
@@ -29,10 +30,10 @@ export default function ProductsTable({
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-bold text-stone-800">Todos los productos</h2>
                 <button
-                onClick={onAdd}
-                className="bg-stone-800 text-white text-sm px-5 py-2 rounded-full hover:bg-stone-700 transition"
+                    onClick={onAdd}
+                    className="bg-stone-800 text-white text-sm px-5 py-2 rounded-full hover:bg-stone-700 transition"
                 >
-                + Agregar producto
+                    + Agregar producto
                 </button>
             </div>
 
@@ -40,12 +41,12 @@ export default function ProductsTable({
                 <table className="w-full text-sm">
                     <thead>
                         <tr className="border-b border-stone-100">
-                        <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Producto</th>
-                        <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Categoría</th>
-                        <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Precio</th>
-                        <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Stock</th>
-                        <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Estado</th>
-                        <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Acciones</th>
+                            <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Producto</th>
+                            <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Categoría</th>
+                            <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Precio</th>
+                            <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Stock</th>
+                            <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Estado</th>
+                            <th className="text-left text-xs text-stone-400 uppercase tracking-widest pb-3">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,7 +54,18 @@ export default function ProductsTable({
                             <tr key={product.id} className="border-b border-stone-50 hover:bg-stone-50 transition">
                                 <td className="py-3">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-stone-100 rounded-xl flex-shrink-0" />
+                                    <div className="relative w-10 h-10 bg-stone-100 rounded-xl overflow-hidden flex-shrink-0">
+                                        {product.image ? (
+                                            <Image
+                                                src={product.image}
+                                                alt={product.name}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-stone-200" />
+                                        )}
+                                    </div>
                                     <p className="font-medium text-stone-800">{product.name}</p>
                                 </div>
                                 </td>

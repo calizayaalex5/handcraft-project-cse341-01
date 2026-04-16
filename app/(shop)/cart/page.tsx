@@ -13,6 +13,8 @@ type CartItemType = {
         id: string
         name: string
         price: number
+        stock: number
+        image?: string | null
         category: { name: string }
     }
 }
@@ -43,6 +45,23 @@ export default function CartPage() {
         setItems(items.filter((item) => item.id !== itemId))
     }
 
+    const handleUpdate = async (itemId: string, quantity: number) => {
+        if (quantity < 1) return
+        
+        await fetch(`/api/cart/${itemId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user!.token}`,
+            },
+            body: JSON.stringify({ quantity }),
+        })
+            setItems(items.map((item) =>
+                item.id === itemId ? { ...item, quantity } : item
+        ))
+        window.dispatchEvent(new Event("cart-updated"))
+    }
+
     const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
 
     if (!user) {
@@ -65,20 +84,25 @@ export default function CartPage() {
                 <h1 className="text-3xl font-bold text-stone-800 mb-10">Tu Carrito</h1>
 
                 {loading ? (
-                <p className="text-stone-400">Cargando carrito...</p>
+                    <p className="text-stone-400">Cargando carrito...</p>
                 ) : items.length === 0 ? (
-                <p className="text-stone-400">Tu carrito está vacío.</p>
+                    <p className="text-stone-400">Tu carrito está vacío.</p>
                 ) : (
-                <div className="flex flex-col lg:flex-row gap-12">
-                    <div className="flex-1">
-                        {items.map((item) => (
-                            <CartItems key={item.id} item={item} onRemove={handleRemove} />
-                        ))}
+                    <div className="flex flex-col lg:flex-row gap-12">
+                        <div className="flex-1">
+                            {items.map((item) => (
+                                <CartItems 
+                                    key={item.id} 
+                                    item={item} 
+                                    onRemove={handleRemove} 
+                                    onUpdate={handleUpdate}    
+                                />
+                            ))}
+                        </div>
+                        <div className="w-full lg:w-80">
+                            <CartSummary total={total} />
+                        </div>
                     </div>
-                    <div className="w-full lg:w-80">
-                        <CartSummary total={total} />
-                    </div>
-                </div>
                 )}
             </section>
 

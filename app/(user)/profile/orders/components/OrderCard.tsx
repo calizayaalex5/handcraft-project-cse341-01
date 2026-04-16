@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 const statusColor: Record<string, string> = {
     DELIVERED: "bg-green-100 text-green-700",
@@ -23,7 +24,10 @@ type Order = {
         id: string
         quantity: number
         price: number
-        product: { name: string }
+        product: { 
+            name: string 
+            image?: string | null
+        }
     }[]
 }
 
@@ -48,7 +52,18 @@ export default function OrderCard({ order }: { order: Order }) {
             <div className="flex flex-col gap-3 border-t border-stone-100 pt-4">
                 {order.items.map((item) => (
                 <div key={item.id} className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-stone-100 rounded-xl flex-shrink-0" />
+                    <div className="relative w-12 h-12 bg-stone-100 rounded-xl overflow-hidden flex-shrink-0">
+                        {item.product.image ? (
+                            <Image
+                                src={item.product.image}
+                                alt={item.product.name}
+                                fill
+                                className="object-cover"
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-stone-100" />
+                        )}
+                    </div>
                     <div className="flex-1">
                         <p className="text-sm font-medium text-stone-800">{item.product.name}</p>
                         <p className="text-xs text-stone-400">Cantidad: {item.quantity}</p>
