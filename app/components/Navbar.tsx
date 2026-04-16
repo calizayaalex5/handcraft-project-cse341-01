@@ -4,6 +4,7 @@ import { ShoppingCart, User, LogOut, Search } from "lucide-react"
 import { useAuth } from "@/app/context/AuthContext"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useCartCount } from "@/app/hooks/useCartCount"
 
 const categories = [
     { label: "Joyería",           href: "/products/category/joyeria" },
@@ -16,6 +17,7 @@ export default function Navbar() {
     const { user, logout } = useAuth()
     const [query, setQuery] = useState("")
     const router = useRouter()
+    const cartCount = useCartCount()
 
     const handleSearch = () => {
         if (!query.trim()) return
@@ -82,8 +84,13 @@ export default function Navbar() {
                     </>
                 )}
 
-                <Link href="/cart"aria-label="Ver carrito" className="hover:text-stone-900 transition">
+                <Link href="/cart" aria-label="Ver carrito" className="hover:text-stone-900 transition relative">
                     <ShoppingCart size={20} />
+                    {cartCount > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                            {cartCount > 9 ? "9+" : cartCount}
+                        </span>
+                    )}
                 </Link>
                 </div>
             </div>

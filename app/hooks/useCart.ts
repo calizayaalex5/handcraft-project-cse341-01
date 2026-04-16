@@ -27,6 +27,8 @@ export function useCart() {
 
             if (!res.ok) throw new Error(data.error)
 
+            window.dispatchEvent(new Event("cart-updated"))
+
             alert("¡Producto agregado al carrito!")
         } catch (error: any) {
             alert(error.message)
