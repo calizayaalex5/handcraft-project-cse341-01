@@ -6,6 +6,7 @@ import Filters from "./components/Filters"
 import ProductCard from "./components/ProductCard"
 import { Search } from "lucide-react"
 import { ProductGridSkeleton } from "@/app/components/Skeleton"
+import AnimatedCard from "@/app/components/AnimatedProductCard"
 
 type Product = {
     id: string
@@ -126,18 +127,19 @@ export default function ProductsPage() {
                         </div>
                         ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {filtered.map((product) => (
-                            <ProductCard
-                                key={product.id}
-                                product={{
-                                id: product.id,
-                                name: product.name,
-                                price: `$${product.price.toFixed(2)}`,
-                                category: product.category.name,
-                                image: product.image ?? undefined,
-                                stock: product.stock,
-                                }}
-                            />
+                            {filtered.map((product, index) => (
+                                <AnimatedCard key={product.id} index={index}>
+                                <ProductCard
+                                    product={{
+                                    id: product.id,
+                                    name: product.name,
+                                    price: `$${product.price.toFixed(2)}`,
+                                    category: product.category.name,
+                                    image: product.image ?? undefined,
+                                    stock: product.stock,
+                                    }}
+                                />
+                                </AnimatedCard>
                             ))}
                         </div>
                         )}
