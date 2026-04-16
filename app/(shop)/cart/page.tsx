@@ -5,6 +5,7 @@ import Footer from "@/app/components/Footer"
 import CartItems from "./components/CartItems"
 import CartSummary from "./components/CartSummary"
 import { useAuth } from "@/app/context/AuthContext"
+import { OrderCardSkeleton } from "@/app/components/Skeleton"
 
 type CartItemType = {
     id: string
@@ -84,7 +85,10 @@ export default function CartPage() {
                 <h1 className="text-3xl font-bold text-stone-800 mb-10">Tu Carrito</h1>
 
                 {loading ? (
-                    <p className="text-stone-400">Cargando carrito...</p>
+                    <div className="flex flex-col gap-4">
+                        <OrderCardSkeleton />
+                        <OrderCardSkeleton />
+                    </div>
                 ) : items.length === 0 ? (
                     <p className="text-stone-400">Tu carrito está vacío.</p>
                 ) : (

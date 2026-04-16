@@ -9,6 +9,7 @@ import Link from "next/link"
 import { useAuth } from "@/app/context/AuthContext"
 import { User, Mail } from "lucide-react"
 import Image from "next/image"
+import { ProductGridSkeleton } from "@/app/components/Skeleton"
 
 type Product = {
   id: string
@@ -119,12 +120,10 @@ export default function SellerPage() {
                 </div>
                 </div>
 
-                {/* Stats */}
                 <SellerStats stats={stats} />
 
-                {/* Productos */}
                 {loading ? (
-                <p className="text-stone-400">Cargando productos...</p>
+                    <ProductGridSkeleton />
                 ) : (
                 <SellerProducts
                     products={products}

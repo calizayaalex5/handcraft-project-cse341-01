@@ -5,6 +5,7 @@ import Footer from "@/app/components/Footer"
 import OrderCard from "./components/OrderCard"
 import Link from "next/link"
 import { useAuth } from "@/app/context/AuthContext"
+import { OrderCardSkeleton } from "@/app/components/Skeleton"
 
 type Order = {
     id: string
@@ -64,7 +65,11 @@ export default function OrdersPage() {
             </div>
 
             {loading ? (
-                <p className="text-stone-400">Cargando pedidos...</p>
+                <div className="flex flex-col gap-6">
+                    <OrderCardSkeleton />
+                    <OrderCardSkeleton />
+                    <OrderCardSkeleton />
+                </div>
             ) : orders.length === 0 ? (
                 <p className="text-stone-400">No tienes pedidos aún.</p>
             ) : (

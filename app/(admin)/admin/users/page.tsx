@@ -5,6 +5,7 @@ import Footer from "@/app/components/Footer"
 import UsersTable from "./components/UsersTable"
 import Link from "next/link"
 import { useAuth } from "@/app/context/AuthContext"
+import { OrderCardSkeleton } from "@/app/components/Skeleton"
 
 type User = {
     id: string
@@ -46,7 +47,11 @@ export default function AdminUsersPage() {
                 </div>
 
                 {loading ? (
-                <p className="text-stone-400">Cargando usuarios...</p>
+                <div className="flex flex-col gap-6">
+                    <OrderCardSkeleton />
+                    <OrderCardSkeleton />
+                    <OrderCardSkeleton />
+                </div>
                 ) : (
                 <UsersTable initialUsers={users} />
                 )}

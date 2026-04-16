@@ -5,6 +5,7 @@ import Footer from "@/app/components/Footer"
 import Filters from "./components/Filters"
 import ProductCard from "./components/ProductCard"
 import { Search } from "lucide-react"
+import { ProductGridSkeleton } from "@/app/components/Skeleton"
 
 type Product = {
     id: string
@@ -108,7 +109,7 @@ export default function ProductsPage() {
                     />
                     <div className="flex-1">
                         {loading ? (
-                        <p className="text-stone-400">Cargando productos...</p>
+                            <ProductGridSkeleton />
                         ) : filtered.length === 0 ? (
                         <div className="text-center py-24">
                             <p className="text-stone-400">No se encontraron productos.</p>

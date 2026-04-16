@@ -6,10 +6,30 @@ import ProfileInfo from "./components/ProfileInfo"
 import OrdersList from "./components/OrdersList"
 import WishlistGrid from "./components/WishlistGrid"
 import Link from "next/link"
+import { ProfileSkeleton } from "@/app/components/Skeleton"
 
 export default function ProfilePage() {
-    const { user } = useAuth()
-    
+    const { user, loading } = useAuth()
+    if (loading) {
+        return (
+        <main className="min-h-screen bg-[#fdf8f3]">
+            <Navbar />
+            <section className="max-w-6xl mx-auto px-6 py-16">
+                <div className="h-8 bg-stone-200 rounded w-40 mb-10 animate-pulse" />
+                <div className="flex flex-col lg:flex-row gap-8">
+                    <div className="w-full lg:w-72">
+                        <ProfileSkeleton />
+                    </div>
+                    <div className="flex-1 flex flex-col gap-8">
+                        <div className="bg-white rounded-2xl p-6 shadow-sm h-48 animate-pulse" />
+                        <div className="bg-white rounded-2xl p-6 shadow-sm h-48 animate-pulse" />
+                    </div>
+                </div>
+            </section>
+            <Footer />
+        </main>
+        )
+    }
     if (!user) {
     return (
         <main className="min-h-screen bg-[#fdf8f3]">

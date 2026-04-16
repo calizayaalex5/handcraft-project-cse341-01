@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useAuth } from "@/app/context/AuthContext"
 import { Heart } from "lucide-react"
 import WishlistItemComponent from "./components/WishListItem"
+import { ProductGridSkeleton } from "@/app/components/Skeleton"
 
 type WishlistItem = {
   id: string
@@ -71,7 +72,7 @@ export default function WishlistPage() {
                 </div>
 
                 {loading ? (
-                    <p className="text-stone-400">Cargando wishlist...</p>
+                    <ProductGridSkeleton />
                 ) : wishlist.length === 0 ? (
                     <div className="text-center py-24">
                         <Heart size={48} className="text-stone-200 mx-auto mb-4" />
