@@ -5,6 +5,7 @@ import { useAuth } from "@/app/context/AuthContext"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useCartCount } from "@/app/hooks/useCartCount"
+import Image from "next/image"
 
 const categories = [
     { label: "Joyería",           href: "/products/category/joyeria" },
@@ -55,32 +56,46 @@ export default function Navbar() {
 
                 {user ? (
                     <>
-                    <Link href="/profile" className="flex items-center gap-2 text-sm hover:text-stone-900 transition">
-                        <User size={16} />
-                        {user.name.split(" ")[0]}
-                    </Link>
-                    {user.role === "ADMIN" && (
-                        <Link href="/admin" className="text-sm text-purple-600 hover:text-purple-800 transition font-medium">
-                        Admin
+                        <Link href="/profile" className="flex items-center gap-2 text-sm hover:text-stone-900 transition">
+
+                        <div className="relative w-8 h-8 bg-stone-200 rounded-full overflow-hidden flex-shrink-0">
+                            {user.image ? (
+                                <Image
+                                    src={user.image}
+                                    alt={user.name}
+                                    fill
+                                    className="object-cover"
+                                />
+                                ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-stone-800 text-white text-xs font-bold">
+                                    {user.name.charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                        </div>
+                        <span>{user.name.split(" ")[0]}</span>
                         </Link>
-                    )}
-                    {user.role === "SELLER" && (
-                        <Link href="/seller" className="text-sm text-blue-600 hover:text-blue-800 transition font-medium">
-                            Mi Tienda
-                        </Link>
-                    )}
-                    <button
-                        onClick={logout}
-                        aria-label="Cerrar sesion"
-                        className="flex items-center gap-1 text-sm text-red-400 hover:text-red-600 transition"
-                    >
-                        <LogOut size={16} />
-                    </button>
+                        {user.role === "ADMIN" && (
+                            <Link href="/admin" className="text-sm text-purple-600 hover:text-purple-800 transition font-medium">
+                                Admin
+                            </Link>
+                        )}
+                        {user.role === "SELLER" && (
+                            <Link href="/seller" className="text-sm text-blue-600 hover:text-blue-800 transition font-medium">
+                                Mi Tienda
+                            </Link>
+                        )}
+                        <button
+                            onClick={logout}
+                            aria-label="Cerrar sesión"
+                            className="flex items-center gap-1 text-sm text-red-400 hover:text-red-600 transition"
+                        >
+                            <LogOut size={16} />
+                        </button>
                     </>
                 ) : (
                     <>
-                    <Link href="/login" className="text-sm hover:text-stone-900 transition">Login</Link>
-                    <Link href="/register" className="text-sm hover:text-stone-900 transition">Register</Link>
+                        <Link href="/login" className="text-sm hover:text-stone-900 transition">Login</Link>
+                        <Link href="/register" className="text-sm hover:text-stone-900 transition">Register</Link>
                     </>
                 )}
 
